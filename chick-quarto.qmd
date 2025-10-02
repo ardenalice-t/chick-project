@@ -26,6 +26,10 @@ body{
 </style>
 
 ```{r setup, include = FALSE, tidy=TRUE}
+#######################
+# Set up
+#######################
+
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -40,15 +44,91 @@ require(kableExtra)
 ```
 
 # Introduction
-In this document we provide examples of what might be included in a coursework document. It also provides good examples of referencing, including tables and figures and bibliography. It also includes a code appendix, such that the code for graphs does not need to be shown everywhere. 
+In this document we provide examples of what might be included in a coursework document. It also provides good examples of referencing, including tables and figures and bibliography. It also includes a code appendix, such that the code for graphs does not need to be shown everywhere @box1964analysis. 
 
-# Chicks
+# Chick Weight over Time {#weight-by-time}
 ``` {r}
+#######################
+# Setting up chick weight
+#######################
+
 #setting up the chick data
 chicks <- ChickWeight
 ```
+The chick dataset contains information on their weight over time, and the diet and chick number. 
+
+```{r echo = F}
+#| layout-ncol: 2
+#| label: fig-distribution-plots
+#| fig-cap: "Two example plots relating to the chick weight"
+#| fig-subcap: 
+#|   - "Chick weight over time."
+#|   - "Chick weight by diet"
+
+#Plotting chick weight over time
+plot(x = chicks$Time, 
+     y = chicks$weight,
+     ylab = "Chick Weight (g)", 
+     xlab = "Time",
+    col = factor(chicks$Diet))
+
+#Plotting chick weight by diet
+plot(x = chicks$Diet, 
+     y = chicks$weight,
+     ylab = "Chick Weight (g)", 
+     xlab = "Diet",
+    col = c(1:4))
+```
 
 
+
+
+```{r echo = F}
+#| label: fig-weight-time
+#| fig-cap: "Scatter plot of chick weight over time."
+plot(x = chicks$Time, 
+     y = chicks$weight,
+     ylab = "Chick Weight (g)", 
+     xlab = "Time",
+    col = factor(chicks$Diet))
+```
+
+```{r echo = F}
+#| label: fig-weight-diet
+#| fig-cap: "Scatter plot of chick weight by diet."
+
+#Plotting chick weight over time
+plot(x = chicks$Diet, 
+     y = chicks$weight,
+     ylab = "Chick Weight (g)", 
+     xlab = "Diet",
+    col = c(1:4))
+```
+
+How many chicks data do we have on each day? 
+```{r echo = FALSE}
+#| label: tbl-day-count
+#| tbl-cap: "Table of chick numbers by day."
+day_counts <- table(chicks$Time)
+knitr::kable(day_counts, col.names = c("Day", "Count"))
+```
+
+How many chicks data do we have on each diet? 
+```{r echo=FALSE}
+#| label: tbl-diet-count
+#| tbl-cap: "Table of chick numbers by diet"
+day_counts <- table(chicks$Diet)
+knitr::kable(day_counts, col.names = c("Diet", "Count"))
+```
+
+```{r}
+# fit linear model
+weight_lm <- lm(formula = weight ~ 1 + Diet, chicks)
+
+# extract coefficients and standard errors
+mass_lm_coefficients <- summary(weight_lm)$coefficients[,1:2]
+mass_lm_coefficients
+```
 
 # Code appendix
 
